@@ -4,7 +4,8 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <script src="https://unpkg.com/typewriter-effect@latest/dist/core.js"></script>
-    <link rel="stylesheet" href="src/style.css" />
+    <script src="https://cdn.jsdelivr.net/npm/axios@1.6.7/dist/axios.min.js"></script>
+
     <title>AI Poem Generator</title>
     <style>
 body{
@@ -76,6 +77,10 @@ footer{
     margin-top: 30px;
 }
 
+.poem strong{
+    color: blueviolet;
+}
+
     </style>
   </head>
   <body>
@@ -88,7 +93,7 @@ footer{
           placeholder="Enter the topic of your love poem"
           autofocus
           required
-          autocomplete="off" class="instructions"
+          autocomplete="off" class="instructions" id="user-instructions"
         />
         <input type="submit" class="submit-button" />
       </form>
@@ -114,17 +119,29 @@ footer{
     </div>
 
     <script>
-        function generatePoem(event){
-            event.preventDefault();
+function displayPoem(response){
 
-            
 new Typewriter("#poem", {
-  strings: "Lust is chaos, love is art",
+  strings: response.data.answer,
   autoStart: true,
   delay:1,
   cursor:"",
 });
         }
+
+
+        function generatePoem(event){
+            event.preventDefault();
+
+            let instructionsInput=document.querySelector("#user-instructions");
+            let apiKey="e6d09442ad1b12tdob2ebfd0f8dc323b";
+            let prompt=`User instructions: Generate a love poem about ${instructionsInput.value}`;
+            let context="You are a romantic Poem expert and love to write short poems. Your mission is to generate a 4 line poem and separate each line with a <br/>. Make sure to follow the user instructions. Do not include a tile to the poem. Sign the poem with 'SheCodes AI' inside a <strong> element at the end of the poem and NOT at the beginning";
+            let apiURL=`https://api.shecodes.io/ai/v1/generate?prompt=${prompt}&context=${context}&key=${apiKey}`;
+
+            axios.get(apiURL).then(displayPoem);
+        }
+
 
         let poemFormElement=document.querySelector("#poem-generator-form");
         poemFormElement.addEventListener("submit",generatePoem);
