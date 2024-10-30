@@ -33,13 +33,25 @@ a{
     color: #272044;
 }
 
-form{
-    padding: 30px;
+.form-container{
+    padding: 20px;
     background-color: white;
     box-shadow: 0px 20px 60px rgba(65,50,100,0.8);
     border-radius: 10px;
-    display:flex;
     margin-bottom: 30px; 
+}
+ .hint{
+    line-height: 1.5;
+    margin-top: 5px;
+    opacity: 0.6;
+    font-size: 12px;
+
+ }
+
+form{
+    
+    display:flex;
+    
 }
 .instructions {
     padding: 16px;
@@ -71,14 +83,34 @@ form{
 
 }
 
+.hidden{
+   display: none; 
+}
 footer{
     text-align: center;
     font-size: 13px;
     margin-top: 30px;
 }
 
+
 .poem strong{
     color: blueviolet;
+}
+
+.generating{
+    animation:blink-animation 1s steps(5, start) infinite;
+}
+
+@keyframes blink-animation{
+    to{
+        visibility: hidden;
+    }
+}
+
+@-webkit-keyframes blink-animation{
+    to{
+        visibility: hidden;
+    }
 }
 
     </style>
@@ -87,6 +119,7 @@ footer{
     <header><div class="container"><h1>AI Love Poem Generator</h1></header>
 
     <main>
+        <div class="form-container">
       <form id="poem-generator-form">
         <input
           type="text"
@@ -97,8 +130,9 @@ footer{
         />
         <input type="submit" class="submit-button" />
       </form>
-      <div class="poem" id="poem">
+      <div class="hint">i.e:Romantic Partner, Family or Friends</div>
       </div>
+      <div class="poem hidden" id="poem"></div>
     </main>
 
     <footer>
@@ -138,6 +172,13 @@ new Typewriter("#poem", {
             let prompt=`User instructions: Generate a love poem about ${instructionsInput.value}`;
             let context="You are a romantic Poem expert and love to write short poems. Your mission is to generate a 4 line poem and separate each line with a <br/>. Make sure to follow the user instructions. Do not include a tile to the poem. Sign the poem with 'SheCodes AI' inside a <strong> element at the end of the poem and NOT at the beginning";
             let apiURL=`https://api.shecodes.io/ai/v1/generate?prompt=${prompt}&context=${context}&key=${apiKey}`;
+
+
+            let poemElement=document.querySelector("#poem");
+            poemElement.classList.remove("hidden");
+            poemElement.innerHTML= `<div class="generating">⌛Generating a love poem about ${instructionsInput.value}</div>`;
+            
+
 
             axios.get(apiURL).then(displayPoem);
         }
