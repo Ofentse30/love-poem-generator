@@ -3,6 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://unpkg.com/typewriter-effect@latest/dist/core.js"></script>
     <link rel="stylesheet" href="src/style.css" />
     <title>AI Poem Generator</title>
     <style>
@@ -81,7 +82,7 @@ footer{
     <header><div class="container"><h1>AI Love Poem Generator</h1></header>
 
     <main>
-      <form>
+      <form id="poem-generator-form">
         <input
           type="text"
           placeholder="Enter the topic of your love poem"
@@ -91,10 +92,7 @@ footer{
         />
         <input type="submit" class="submit-button" />
       </form>
-      <div class="poem">
-        Love and lust are poles apart.
-        <br />
-        Lust is chaos, love is art.
+      <div class="poem" id="poem">
       </div>
     </main>
 
@@ -115,6 +113,21 @@ footer{
     </footer>
     </div>
 
-    <script></script>
+    <script>
+        function generatePoem(event){
+            event.preventDefault();
+
+            
+new Typewriter("#poem", {
+  strings: "Lust is chaos, love is art",
+  autoStart: true,
+  delay:1,
+  cursor:"",
+});
+        }
+
+        let poemFormElement=document.querySelector("#poem-generator-form");
+        poemFormElement.addEventListener("submit",generatePoem);
+    </script>
   </body>
 </html>
